@@ -5,10 +5,11 @@ module Vagrant
 
             def initialize
                 @params = [
-                    'cluster_name' => ['CLUSTER_NAME', 'cluster_name', 'My amazing ES cluster'],
+                    'cluster_name' => ['CLUSTER_NAME', 'cluster_name', 'dev-es-cluster'],
                     'cluster_ip' => ['CLUSTER_IP_PATTERN', 'cluster_ip', '10.0.0.%d'],
-                    'cluster_count' => ['CLUSTER_COUNT', 'cluster_size', 5],
-                    'cluster_ram' => ['CLUSTER_RAM', 'cluster_ram', 512],
+                    'cluster_count' => ['CLUSTER_COUNT', 'cluster_count', 3],
+                    'cluster_ram' => ['CLUSTER_RAM', 'cluster_ram', 1024],
+                    'cluster_cpu' => ['CLUSTER_CPU', 'cluster_cpu', 1],
                 ]
 
                 @names = %w(thor zeus isis shifu baal)
@@ -91,6 +92,12 @@ module Vagrant
                 cluster_ram = self.get_cluster_info index
                 self.logger.info "Cluster RAM (for each node): #{cluster_ram.strip}"
                 self.save_cluster_info index, cluster_ram
+                #
+                # Building and showing CLUSTER RAM information
+                index = 'cluster_cpu'
+                cluster_cpu = self.get_cluster_info index
+                self.logger.info "Cluster CPU (for each node): #{cluster_cpu.strip}"
+                self.save_cluster_info index, cluster_cpu
 
                 self.logger.info "----------------------------------------------------------"
             end
