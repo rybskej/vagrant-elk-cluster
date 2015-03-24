@@ -198,13 +198,13 @@ This will stop the `vm2` instance.
 
 ```
 vagrant destroy
+rm -rf conf/elasticsearch-vm* log/* data/* 
 ```
 
 This will stop the whole cluster. If you want to only stop one VM, you can use:
 
 ```
 vagrant destroy vm2
-rm -rf conf/elasticsearch-vm* log/* data/* 
 ```
 
 :warning: If you destroy a VM, I suggest you to destroy all the cluster to be sure to have the same ES version in all of your nodes.

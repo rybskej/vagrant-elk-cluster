@@ -53,6 +53,7 @@ module Vagrant
                 conf_file_format = "conf/elasticsearch-#{vm}.yml"
 
                 File.open(conf_file_format, 'w') do |file|
+                    @vm_name = vm
                     @node_ip = get_vm_ip index
                     @node_name = get_node_name index
                     @node_marvel_enabled = (index == 1)

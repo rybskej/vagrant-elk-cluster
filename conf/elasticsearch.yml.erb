@@ -146,7 +146,7 @@ index.number_of_replicas: 2
 
 # Path to directory where to store index data allocated for this node.
 #
-path.data: /vagrant/data/<%= @node_name.strip %>
+path.data: /vagrant/data/<%= @vm_name.strip %>
 #
 # Can optionally include more than one location, causing data to be striped across
 # the locations (a la RAID 0) on a file level, favouring locations with most free
@@ -161,7 +161,7 @@ path.data: /vagrant/data/<%= @node_name.strip %>
 # Path to log files:
 #
 # path.logs: /path/to/logs
-path.logs: /vagrant/logs/<%= @node_name.strip %>
+path.logs: /vagrant/logs/<%= @vm_name.strip %>
 
 # Path to where plugins are installed:
 #
