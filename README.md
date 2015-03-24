@@ -1,27 +1,21 @@
 vagrant-elasticsearch-cluster
 =============================
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ypereirareis/vagrant-elasticsearch-cluster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 Create an ElasticSearch cluster with a single bash command :
 
 ```
 vagrant up
 ```
+<div style='color:red'>**Read Pre Requisites below**</div>
+
 
 **Programs, plugins, libs and versions information**
 
 | Program, plugin, lib              | Version     | How to use it                             |
 | --------------------------------- | ----------- | ----------------------------------------- |
-| ElasticSearch                     | 1.4.3       | [http://www.elasticsearch.org/guide/](http://www.elasticsearch.org/guide/) |
-| Java (openjdk-7-jre)              | 1.7.0_25    |                                           |
-| elasticsearch-image               | 1.2.0       | [https://github.com/kzwang/elasticsearch-image](https://github.com/kzwang/elasticsearch-image) |
-| elasticsearch-mapper-attachments  | 2.4.2       | [https://github.com/elasticsearch/elasticsearch-mapper-attachments](https://github.com/elasticsearch/elasticsearch-mapper-attachments) |
-| rssriver (david pilato)           | 1.3.0       | [http://www.pilato.fr/rssriver/](http://www.pilato.fr/rssriver/) |
-| elasticsearch-river-jdbc          | 1.4.0.9     | [https://github.com/jprante/elasticsearch-river-jdbc](https://github.com/jprante/elasticsearch-river-jdbc) |
-| elasticsearch-river-rabbitmq      | 2.4.1       | [https://github.com/elasticsearch/elasticsearch-river-rabbitmq](https://github.com/elasticsearch/elasticsearch-river-rabbitmq) |
-| elasticsearch-river-twitter       | 2.4.2       | [https://github.com/elasticsearch/elasticsearch-river-twitter](https://github.com/elasticsearch/elasticsearch-river-twitter) |
-| elasticsearch-river-wikipedia     | 2.4.1       | [https://github.com/elasticsearch/elasticsearch-river-wikipedia](https://github.com/elasticsearch/elasticsearch-river-wikipedia) |
+| ElasticSearch                     | 1.5.0       | [http://www.elasticsearch.org/guide/](http://www.elasticsearch.org/guide/) |
+| Java (oracle)              | 1.7.0_75    |                                           |
+| elasticsearch-mapper-attachments  | latest       | [https://github.com/elasticsearch/elasticsearch-mapper-attachments](https://github.com/elasticsearch/elasticsearch-mapper-attachments) |
 
 This plugins are just installed through the `bin/plugin -i` command. You must configure everything else.
 
@@ -29,7 +23,7 @@ This plugins are just installed through the `bin/plugin -i` command. You must co
 
 | Configuration              |  Value(s)                                            |
 | -------------------------- | ---------------------------------------------------- |
-| Cluster name               | elasticsearch-cluster-test                           |
+| Cluster name               |es-dev-cluster                        |
 | Nodes names                | thor, zeus, isis, baal, shifu                        |
 | VM names                   | vm1, vm2, vm3, vm4, vm5                              |
 | Default cluster network IP | 10.0.0.0                                             |
@@ -40,18 +34,19 @@ This plugins are just installed through the `bin/plugin -i` command. You must co
 
 **Must have on your local machine**
 
-* VirtualBox (last version)
+* VirtualBox (last version) OR VMWare desktop|fusion OR parallels
+* Respective provider plugins for vmware or parallels
 * Vagrant (>=1.5)
 * cUrl (or another REST client to talk to ES)
 
 **Clone this repository**
 
-git clone git@github.com:ypereirareis/vagrant-elasticsearch-cluster.git
+git clone git@github.com:bhaskar_vk/vagrant-elasticsearch-cluster.git
 
 **WARNING**
 
 You'll need enough RAM to run VMs in your cluster.
-Each new VM launched within your cluster will have 512M of RAM allocated.
+Each new VM launched within your cluster will have 1024M of RAM allocated.
 You can change this configuration in the Vagrantfile once cloned.
 
 2.How to run a new ElasticSearch cluster
@@ -65,6 +60,16 @@ and the RAM needed would be much more important.
 If you still want to use more than 5 VMs,
 you will have to add/edit your own configuration files in the [conf](conf) directory.
 
+By default 3 VMs are started but you can increase (max 5) or decrease (min 1) as you see fit in `lib/elasticsearch-module.rb`
+
+**Pre Requisite**
+
+*	Download JDK 7 64bit RPM from [http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html](Oracle) 
+*	Download elasticsearch-1.5.0.tar.gz from [https://www.elastic.co/downloads/elasticsearch](elastic)
+*	Place both files at the root of this repo.
+*	This is one time step
+*	If you need to upgrade ES or JDK download respective versions and change `lib/upgrade.sh` and re-run provisioning.
+
 **Run the cluster**
 
 Simply go in the cloned directory (vagrant-elasticsearch-cluster by default).
@@ -74,7 +79,7 @@ Execute this command :
 vagrant up
 ```
 
-By default, this command will boot 5 VMs, with `My amazing ES cluster` name, `512M` of RAM for each node and this network ip address `10.0.0.0`.
+By default, this command will boot 5 VMs, with `My amazing ES cluster` name, `1024M` of RAM and `1` virtual CPU for each node and this network ip address `10.0.0.0`.
 
 You can change the cluster size with the `CLUSTER_COUNT` variable:
 
@@ -94,19 +99,25 @@ You can change the cluster RAM used for each node with the `CLUSTER_RAM` variabl
 CLUSTER_RAM=1024 vagrant up
 ```
 
+You can change the cluster CPU used for each node with the `CLUSTER_CPU` variable:
+
+```
+CLUSTER_CPU=2 vagrant up
+```
+
 You can change the cluster network IP address with the `CLUSTER_IP_PATTERN` variable:
 
 ```
 CLUSTER_IP_PATTERN='172.16.15.%d' vagrant up
 ```
 
-Providing the `CLUSTER_NAME`, `CLUSTER_COUNT`, `CLUSTER_RAM`, `CLUSTER_IP_PATTERN` variables is only required when you first start the cluster.
+Providing the `CLUSTER_NAME`, `CLUSTER_COUNT`, `CLUSTER_RAM`, `CLUSTER_CPU`, `CLUSTER_IP_PATTERN` variables is only required when you first start the cluster.
 Vagrant will save/cache these values so you can run other commands without repeating yourself.
 
 Of course you can use all these variables at the same time :
 
 ```
-$ CLUSTER_NAME='My awesome search engine' CLUSTER_IP_PATTERN='172.16.25.%d' CLUSTER_COUNT=3 CLUSTER_RAM=512 vagrant status
+$ CLUSTER_NAME='My awesome search engine' CLUSTER_IP_PATTERN='172.16.25.%d' CLUSTER_COUNT=3 CLUSTER_RAM=512 CLUSTER_CPU=2 vagrant status
 ----------------------------------------------------------
           Your ES cluster configurations
 ----------------------------------------------------------
@@ -135,7 +146,7 @@ Once the cluster is launched (please wait a few seconds) go to : [http://10.0.0.
 
 Plugins URLs (replace IP if you changed it with `CLUSTER_IP_PATTERN` var) :
 
-* [http://10.0.0.11:9200/_plugin/marvel](http://10.0.0.11:9200/_plugin/marvel)
+* [http://10.0.0.11:9200/_plugin/marvel](http://10.0.0.11:9200/_plugin/kopf)
 * [http://10.0.0.11:9200/_plugin/paramedic/](http://10.0.0.11:9200/_plugin/paramedic/)
 * [http://10.0.0.11:9200/_plugin/head/](http://10.0.0.11:9200/_plugin/head/)
 * [http://10.0.0.11:9200/_plugin/bigdesk](http://10.0.0.11:9200/_plugin/bigdesk)
@@ -193,15 +204,8 @@ This will stop the whole cluster. If you want to only stop one VM, you can use:
 
 ```
 vagrant destroy vm2
+rm -rf conf/elasticsearch-vm* log/* data/* 
 ```
-
-**Remove the cluster**
-
-```
-vagrant box remove ypereirareis/debian-elasticsearch-amd64
-```
-
-This will remove your local copy of the vagrant base-box.
 
 :warning: If you destroy a VM, I suggest you to destroy all the cluster to be sure to have the same ES version in all of your nodes.
 
@@ -218,7 +222,7 @@ Once connected to the VM, you can manage this instance with the following comman
 
 You should be brought to the screen session hosting ElasticSearch and see its log.
 
-The first launch of ES instance is done by vagrant provisionning.
+The first launch of ES instance is done by vagrant provisioning.
 So you should prepend `sudo` for each command above.
 But you have the possibility to start an ES instance as 'vagrant' user from the VM.
 
@@ -231,7 +235,10 @@ node-start
 This chain of commands will log you into a chosen VM,
 will stop the ES 'root-user' instance and will start a 'vagrant-user' ES instance.
 
-3.Configure your cluster
+3.Default Directories
+By default the `data`, `logs` and `config` directories live outside of the VMs on the host, this way you can destroy and rebuild VMs as much as you like without losing your data. You can also upgrade Elasticsearch and not lose data.
+
+4.Configure your cluster
 --
 
 If you need or want to change the default working configuration of your cluster,
@@ -242,17 +249,17 @@ By default, this configuration files are **auto-generated** by Vagrant when runn
 In this case, default values listed at the top of this page are used.
 
 
-4.ElasticSearch plugins inside the base box
+5.ElasticSearch plugins inside the base box
 --
 
 * elasticsearch-head - [https://github.com/mobz/elasticsearch-head](https://github.com/mobz/elasticsearch-head)
 * elasticsearch-paramedic - [https://github.com/karmi/elasticsearch-paramedic](https://github.com/karmi/elasticsearch-paramedic)
 * BigDesk - [https://github.com/lukas-vlcek/bigdesk](https://github.com/lukas-vlcek/bigdesk)
-* Marvel - [http://www.elasticsearch.org/overview/marvel/](http://www.elasticsearch.org/overview/marvel/)
+* Kopf - [https://github.com/lmenezes/elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)
 * ElasticsearchHQ - [http://www.elastichq.org/](http://www.elastichq.org/)
 
 
-5.Working with your cluster
+6.Working with your cluster
 --
 
 **Create a "subscriptions" index with 5 shards and 2 replicas**
@@ -278,7 +285,7 @@ curl -XPUT 'http://10.0.0.11:9200/subscriptions/subscription/1' -d '{
 
 You can now perform any action/request authorized by elasticsearch API (index, get, delete, bulk,...)
 
-6.Vagrant
+7.Vagrant
 --
 
 You can use every vagrant command to manage your cluster and VMs.
@@ -286,14 +293,12 @@ This project is simply made to launch a working ES cluster with a single command
 
 Use it to test every configuration/queries you want (split brain, unicast, recovery, indexing, sharding)
 
-7.Important
+8.Important
 --
 
 Do forks, PR, and MRs !!!!
 
-8.TODO
+9.TODO
 --
 
-* Add extra plugins or applications in the base box (redis, logstash, kibana, ...)
-* Add some configurations to illustrate split brain, unicast discovery, load balancing, snapshots, recovery...
-* Add possibility to configure cluster name, RAM per node AND hostnames through the shell (ENV vars)
+* Add configuration to create a true cluster with dedicated master, client and data nodes.

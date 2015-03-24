@@ -1,5 +1,6 @@
 .vagrant/
 conf/*.yml
 logs/
+data/
 *.rpm
 *.gz

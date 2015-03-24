@@ -146,7 +146,7 @@ index.number_of_replicas: 2
 
 # Path to directory where to store index data allocated for this node.
 #
-# path.data: /path/to/data
+path.data: /vagrant/data/<%= @node_name.strip %>
 #
 # Can optionally include more than one location, causing data to be striped across
 # the locations (a la RAID 0) on a file level, favouring locations with most free
@@ -161,6 +161,7 @@ index.number_of_replicas: 2
 # Path to log files:
 #
 # path.logs: /path/to/logs
+path.logs: /vagrant/logs/<%= @node_name.strip %>
 
 # Path to where plugins are installed:
 #
@@ -376,6 +377,6 @@ http.port: 9200
 #monitor.jvm.gc.old.info: 5s
 #monitor.jvm.gc.old.debug: 2s
 
-marvel.agent.enabled: <%= @node_marvel_enabled %>
-marvel.agent.exporter.es.hosts: ["<%= @cluster_ip.strip % 11 %>:9200"]
+#marvel.agent.enabled: <%= @node_marvel_enabled %>
+#marvel.agent.exporter.es.hosts: ["<%= @cluster_ip.strip % 11 %>:9200"]
 
