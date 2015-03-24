@@ -61,8 +61,8 @@ Vagrant.configure("2") do |config|
             node.vm.provision 'shell', path: './lib/upgrade.sh'
             node.vm.provision 'shell', inline: @node_start_inline_script % [name, node_name, ip],
                 run: 'always'
-            node.vm.network "forwarded_port", guest: 9200, host: 9200+nodes_number-1
-            node.vm.network "forwarded_port", guest: 9300, host: 9300+nodes_number-1
+            node.vm.network "forwarded_port", guest: 9200, host: 9200+index-1
+            node.vm.network "forwarded_port", guest: 9300, host: 9300+index-1
         end
     end
     utils.logger.info "----------------------------------------------------------"
