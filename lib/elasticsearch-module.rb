@@ -3,6 +3,14 @@ module Vagrant
         class Util
             attr_accessor :logger
 
+            def get_dot_vagrant
+                File.join(File.dirname(__FILE__),'..','.vagrant')
+            end
+
+            def get_conf_dir
+                File.join(File.dirname(__FILE__),'..','conf')
+            end
+
             def initialize
                 @params = [
                     'cluster_name' => ['CLUSTER_NAME', 'cluster_name', 'dev-es-cluster'],
@@ -32,25 +40,29 @@ module Vagrant
 
             def get_cluster_info(index)
                 return ENV[@params[0][index][0]] if ENV[@params[0][index][0]]
-                return (File.read ".vagrant/#{@params[0][index][1]}") if File.exist? ".vagrant/#{@params[0][index][1]}"
+                dot_vagrant = get_dot_vagrant()
+                return (File.read "#{dot_vagrant}/#{@params[0][index][1]}") if File.exist? "#{dot_vagrant}/#{@params[0][index][1]}"
                 "#{@params[0][index][2]}"
             end
 
             def save_cluster_info(index, value)
-                Dir.mkdir('.vagrant') unless Dir.exist?('.vagrant')
-                File.open(".vagrant/#{@params[0][index][1]}", 'w') do |file|
+                dot_vagrant = get_dot_vagrant()
+                Dir.mkdir('#{dot_vagrant}') unless Dir.exist?('#{dot_vagrant}')
+                File.open("#{dot_vagrant}/#{@params[0][index][1]}", 'w') do |file|
                     file.puts value.to_s
                 end
             end
 
             def get_config_template
-                config_file = File.open('conf/elasticsearch.yml.erb', 'r')
+                conf_dir = get_conf_dir()
+                config_file = File.open('#{conf_dir}/elasticsearch.yml.erb', 'r')
                 ERB.new(config_file.read)
             end
 
             def build_config(index)
                 vm = get_vm_name index
-                conf_file_format = "conf/elasticsearch-#{vm}.yml"
+                conf_dir = get_conf_dir()
+                conf_file_format = "#{conf_dir}/elasticsearch-#{vm}.yml"
 
                 File.open(conf_file_format, 'w') do |file|
                     @vm_name = vm
