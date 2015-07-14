@@ -39,8 +39,9 @@ _Logstash Syslog Ports_ : **localhost:5514 (Both TCP and UDP)** (_from Host Mach
 
 _Cluster Nodes :_
 
-| VM Name| Node Name|Default IP| VM Port <=> Host Port   |Description     |
-| -------------------------- | -------------|-----------------|---------------------- |
+
+| VM Name| Node Name|Default IP| VM Port <=> Host Port|Description|
+| -------|----------|----------|----------------------|-----------|
 |vm1|thor|10.1.1.11|9200<=>9201<br/>9300<=>9301|1<sup>st</sup> Elasticsearch Node|
 |vm2|zeus|10.1.1.12|9200<=>9202<br/>9300<=>9302|2<sup>nd</sup> Elasticsearch Node|
 |vm3|isis|10.1.1.13|9200<=>9203<br/>9300<=>9303|3<sup>rd</sup> Elasticsearch Node|
