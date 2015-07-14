@@ -44,11 +44,11 @@ node.name: "<%= @node_name.strip %>"
 #
 # Allow this node to be eligible as a master node (enabled by default):
 #
-node.master: true
+node.master: <%= @node_master %>
 #
 # Allow this node to store data (enabled by default):
 #
-node.data: true
+node.data: <%= @node_data %>
 
 # You can exploit these settings to design advanced cluster topologies.
 #
@@ -104,7 +104,7 @@ node.data: true
 
 # Set the number of shards (splits) of an index (5 by default):
 #
-index.number_of_shards: 5
+index.number_of_shards: 3
 
 # Set the number of replicas (additional copies) of an index (1 by default):
 #
@@ -376,7 +376,3 @@ http.port: 9200
 #monitor.jvm.gc.old.warn: 10s
 #monitor.jvm.gc.old.info: 5s
 #monitor.jvm.gc.old.debug: 2s
-
-#marvel.agent.enabled: <%= @node_marvel_enabled %>
-#marvel.agent.exporter.es.hosts: ["<%= @cluster_ip.strip % 11 %>:9200"]
-

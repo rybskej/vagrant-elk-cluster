@@ -3,14 +3,13 @@
 require 'erb'
 require_relative 'lib/elasticsearch-module.rb'
 require_relative 'lib/elasticsearch-script.rb'
+require_relative 'lib/kibana-script.rb'
 
 utils = Vagrant::ElastiSearchCluster::Util.new
 
 Vagrant.configure("2") do |config|
 
     utils.manage_and_print_config
-    #config.vm.network "forwarded_port", guest: 9200, host: 9200, auto_correct: true
-    #config.vm.network "forwarded_port", guest: 9300, host: 9300, auto_correct: true
 
     nodes_number = utils.get_cluster_info 'cluster_count'
     nodes_number = nodes_number.to_i
@@ -20,7 +19,7 @@ Vagrant.configure("2") do |config|
 
     cluster_cpu = utils.get_cluster_info 'cluster_cpu'
 
-    config.vm.box = 'chef/centos-7.0'
+    config.vm.box = 'chef/centos-7.1'
 
     # Virtualbox
     config.vm.provider 'virtualbox' do |vbox, override|
@@ -33,7 +32,7 @@ Vagrant.configure("2") do |config|
 
     # Parallels
     config.vm.provider "parallels" do |v, override|
-        override.vm.box = "parallels/centos-7.0"
+        override.vm.box = "parallels/centos-7.1"
         #v.update_guest_tools = true
         v.optimize_power_consumption = false
         v.memory = cluster_ram
@@ -47,6 +46,7 @@ Vagrant.configure("2") do |config|
         vmware.gui = false
     end
 
+    # ES Nodes
     (1..nodes_number).each do |index|
         name = utils.get_vm_name index
         node_name = utils.get_node_name index
@@ -56,13 +56,37 @@ Vagrant.configure("2") do |config|
         utils.build_config index
 
         config.vm.define :"#{name}", primary: primary do |node|
-            node.vm.hostname = "#{node_name}.es.dev"
+            node.vm.hostname = "#{name}.es.dev"
             node.vm.network 'private_network', ip: ip, auto_config: true
-            node.vm.provision 'shell', path: './lib/upgrade.sh'
+            node.vm.provision 'shell', path: './lib/upgrade-es.sh'
             node.vm.provision 'shell', inline: @node_start_inline_script % [name, node_name, ip],
                 run: 'always'
-            node.vm.network "forwarded_port", guest: 9200, host: 9200+index-1
-            node.vm.network "forwarded_port", guest: 9300, host: 9300+index-1
+            node.vm.network "forwarded_port", guest: 9200, host: 9200+index
+            node.vm.network "forwarded_port", guest: 9300, host: 9300+index
+            config.vm.provider "parallels" do |v, override|
+                v.name = "elasticsearch-#{name}"
+            end
+        end
+    end
+    # Kibana + Client Node
+    name = utils.get_kibana_vm_name
+    node_name = utils.get_kibana_node_name
+    ip = utils.get_kibana_vm_ip
+    utils.build_kibana_config
+    config.vm.define :"kibana" do |node|
+        node.vm.hostname = "#{node_name}.es.dev"
+        node.vm.network 'private_network', ip: ip, auto_config: true
+        node.vm.provision 'shell', path: './lib/upgrade-es.sh'
+        node.vm.provision 'shell', path: './lib/upgrade-kibana.sh'
+        node.vm.provision 'shell', inline: @node_start_inline_script % [name, node_name, ip],
+            run: 'always'
+        node.vm.provision 'shell', inline: @kibana_start_inline_script % [name, node_name, ip],
+            run: 'always'
+        node.vm.network "forwarded_port", guest: 9200, host: 9200
+        node.vm.network "forwarded_port", guest: 9300, host: 9300
+        node.vm.network "forwarded_port", guest: 5601, host: 5601
+        config.vm.provider "parallels" do |v, override|
+            v.name = "elasticsearch-#{name}"
         end
     end
     utils.logger.info "----------------------------------------------------------"

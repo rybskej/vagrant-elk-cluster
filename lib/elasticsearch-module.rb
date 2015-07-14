@@ -14,7 +14,7 @@ module Vagrant
             def initialize
                 @params = [
                     'cluster_name' => ['CLUSTER_NAME', 'cluster_name', 'dev-es-cluster'],
-                    'cluster_ip' => ['CLUSTER_IP_PATTERN', 'cluster_ip', '10.0.0.%d'],
+                    'cluster_ip' => ['CLUSTER_IP_PATTERN', 'cluster_ip', '10.1.1.%d'],
                     'cluster_count' => ['CLUSTER_COUNT', 'cluster_count', 3],
                     'cluster_ram' => ['CLUSTER_RAM', 'cluster_ram', 1024],
                     'cluster_cpu' => ['CLUSTER_CPU', 'cluster_cpu', 1],
@@ -38,6 +38,20 @@ module Vagrant
                 @names[index - 1]
             end
 
+            def get_kibana_vm_name
+                "vm250"
+            end
+
+            def get_kibana_vm_ip
+                ip = get_cluster_info 'cluster_ip'
+                ip % 250
+            end
+
+            def get_kibana_node_name
+                "kibana"
+            end
+
+
             def get_cluster_info(index)
                 return ENV[@params[0][index][0]] if ENV[@params[0][index][0]]
                 dot_vagrant = get_dot_vagrant()
@@ -47,7 +61,7 @@ module Vagrant
 
             def save_cluster_info(index, value)
                 dot_vagrant = get_dot_vagrant()
-                Dir.mkdir('#{dot_vagrant}') unless Dir.exist?('#{dot_vagrant}')
+                Dir.mkdir("#{dot_vagrant}") unless Dir.exist?("#{dot_vagrant}")
                 File.open("#{dot_vagrant}/#{@params[0][index][1]}", 'w') do |file|
                     file.puts value.to_s
                 end
@@ -55,7 +69,7 @@ module Vagrant
 
             def get_config_template
                 conf_dir = get_conf_dir()
-                config_file = File.open('#{conf_dir}/elasticsearch.yml.erb', 'r')
+                config_file = File.open("#{conf_dir}/elasticsearch.yml.erb", 'r')
                 ERB.new(config_file.read)
             end
 
@@ -68,7 +82,8 @@ module Vagrant
                     @vm_name = vm
                     @node_ip = get_vm_ip index
                     @node_name = get_node_name index
-                    @node_marvel_enabled = (index == 1)
+                    @node_master = true
+                    @node_data = true
                     @cluster_ip = get_cluster_info 'cluster_ip'
                     @cluster_name = get_cluster_info 'cluster_name'
 
@@ -76,6 +91,26 @@ module Vagrant
                     file.puts self.get_config_template.result(binding)
                 end unless File.exist? conf_file_format
             end
+
+            def build_kibana_config
+                vm = get_kibana_vm_name
+                conf_dir = get_conf_dir()
+                conf_file_format = "#{conf_dir}/elasticsearch-#{vm}.yml"
+
+                File.open(conf_file_format, 'w') do |file|
+                    @vm_name = vm
+                    @node_ip = get_kibana_vm_ip
+                    @node_name = get_kibana_node_name
+                    @node_master = false
+                    @node_data = false
+                    @cluster_ip = get_cluster_info 'cluster_ip'
+                    @cluster_name = get_cluster_info 'cluster_name'
+
+                    @logger.info "Building configuration for #{vm}"
+                    file.puts self.get_config_template.result(binding)
+                end unless File.exist? conf_file_format
+            end
+
 
             def manage_and_print_config
                 self.logger.info "----------------------------------------------------------"
