@@ -4,6 +4,7 @@ require 'erb'
 require_relative 'lib/elasticsearch-module.rb'
 require_relative 'lib/elasticsearch-script.rb'
 require_relative 'lib/kibana-script.rb'
+require_relative 'lib/logstash-script.rb'
 
 utils = Vagrant::ElastiSearchCluster::Util.new
 
@@ -40,10 +41,12 @@ Vagrant.configure("2") do |config|
     end
 
     # VMWare
-    config.vm.provider "vmware_fusion" do |vmware, override|
-        vmware.vmx["memsize"] = cluster_ram
-        vmware.vmx["numvcpus"] = cluster_cpu
-        vmware.gui = false
+    ["vmware_fusion", "vmware_workstation"].each do |vmware|
+        config.vm.provider vmware do |v|
+            v.vmx["memsize"] = cluster_ram
+            v.vmx["numvcpus"] = cluster_cpu
+            v.gui = false
+        end
     end
 
     # ES Nodes
@@ -63,17 +66,26 @@ Vagrant.configure("2") do |config|
                 run: 'always'
             node.vm.network "forwarded_port", guest: 9200, host: 9200+index
             node.vm.network "forwarded_port", guest: 9300, host: 9300+index
-            config.vm.provider "parallels" do |v, override|
+            node.vm.provider "parallels" do |v|
                 v.name = "elasticsearch-#{name}"
+            end
+            node.vm.provider "virtualbox" do |v|
+                v.name = "elasticsearch-#{name}"
+            end
+            ["vmware_fusion", "vmware_workstation"].each do |vmware|
+                node.vm.provider vmware do |v|
+                    v.vmx["displayname"] =  "elasticsearch-#{name}"
+                end
             end
         end
     end
+
     # Kibana + Client Node
-    name = utils.get_kibana_vm_name
-    node_name = utils.get_kibana_node_name
-    ip = utils.get_kibana_vm_ip
-    utils.build_kibana_config
     config.vm.define :"kibana" do |node|
+        name = utils.get_kibana_vm_name
+        node_name = utils.get_kibana_node_name
+        ip = utils.get_kibana_vm_ip
+        utils.build_kibana_config
         node.vm.hostname = "#{node_name}.es.dev"
         node.vm.network 'private_network', ip: ip, auto_config: true
         node.vm.provision 'shell', path: './lib/upgrade-es.sh'
@@ -85,8 +97,42 @@ Vagrant.configure("2") do |config|
         node.vm.network "forwarded_port", guest: 9200, host: 9200
         node.vm.network "forwarded_port", guest: 9300, host: 9300
         node.vm.network "forwarded_port", guest: 5601, host: 5601
-        config.vm.provider "parallels" do |v, override|
+        node.vm.provider "parallels" do |v|
             v.name = "elasticsearch-#{name}"
+        end
+        node.vm.provider "virtualbox" do |v|
+            v.name = "elasticsearch-#{name}"
+        end
+        ["vmware_fusion", "vmware_workstation"].each do |vmware|
+            node.vm.provider vmware do |v|
+                v.vmx["displayname"] =  "elasticsearch-#{name}"
+            end
+        end
+    end
+
+    # logstash
+    config.vm.define :"logstash" do |node|
+        name = utils.get_logstash_vm_name
+        node_name = utils.get_logstash_node_name
+        ip = utils.get_logstash_vm_ip
+        utils.build_logstash_config
+        node.vm.hostname = "#{node_name}.es.dev"
+        node.vm.network 'private_network', ip: ip, auto_config: true
+        node.vm.provision 'shell', path: './lib/upgrade-logstash.sh'
+        node.vm.provision 'shell', inline: @logstash_start_inline_script % [name, node_name, ip],
+            run: 'always'
+        node.vm.network "forwarded_port", guest: 5514, host: 5514, protocol: 'tcp'
+        node.vm.network "forwarded_port", guest: 5514, host: 5514, protocol: 'udp'
+        node.vm.provider "parallels" do |v|
+            v.name = "elasticsearch-#{name}"
+        end
+        node.vm.provider "virtualbox" do |v|
+            v.name = "elasticsearch-#{name}"
+        end
+        ["vmware_fusion", "vmware_workstation"].each do |vmware|
+            node.vm.provider vmware do |v|
+                v.vmx["displayname"] =  "elasticsearch-#{name}"
+            end
         end
     end
     utils.logger.info "----------------------------------------------------------"

@@ -51,6 +51,18 @@ module Vagrant
                 "kibana"
             end
 
+            def get_logstash_vm_name
+                "vm251"
+            end
+
+            def get_logstash_vm_ip
+                ip = get_cluster_info 'cluster_ip'
+                ip % 251
+            end
+
+            def get_logstash_node_name
+                "logstash"
+            end
 
             def get_cluster_info(index)
                 return ENV[@params[0][index][0]] if ENV[@params[0][index][0]]
@@ -70,6 +82,12 @@ module Vagrant
             def get_config_template
                 conf_dir = get_conf_dir()
                 config_file = File.open("#{conf_dir}/elasticsearch.yml.erb", 'r')
+                ERB.new(config_file.read)
+            end
+
+            def get_logstash_config_template
+                conf_dir = get_conf_dir()
+                config_file = File.open("#{conf_dir}/logstash.conf.erb", 'r')
                 ERB.new(config_file.read)
             end
 
@@ -111,6 +129,18 @@ module Vagrant
                 end unless File.exist? conf_file_format
             end
 
+            def build_logstash_config
+                vm = get_logstash_vm_name
+                conf_dir = get_conf_dir()
+                conf_file_format = "#{conf_dir}/logstash-#{vm}.conf"
+
+                File.open(conf_file_format, 'w') do |file|
+                    @node01_ip = get_vm_ip 1
+                    @cluster_name = get_cluster_info 'cluster_name'
+                    @logger.info "Building configuration for #{vm}"
+                    file.puts self.get_logstash_config_template.result(binding)
+                end unless File.exist? conf_file_format
+            end
 
             def manage_and_print_config
                 self.logger.info "----------------------------------------------------------"
