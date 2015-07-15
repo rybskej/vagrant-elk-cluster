@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
     cluster_ram = cluster_ram.to_i
 
     cluster_cpu = utils.get_cluster_info 'cluster_cpu'
+    cluster_cpu = cluster_cpu.to_i
 
     config.vm.box = 'chef/centos-7.1'
 

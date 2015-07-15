@@ -31,7 +31,7 @@ module Vagrant
 
             def get_vm_ip(index)
                 ip = get_cluster_info 'cluster_ip'
-                ip % (10 + index)
+                ip.strip % (10 + index)
             end
 
             def get_node_name(index)
@@ -44,7 +44,7 @@ module Vagrant
 
             def get_kibana_vm_ip
                 ip = get_cluster_info 'cluster_ip'
-                ip % 250
+                ip.strip % 250
             end
 
             def get_kibana_node_name
@@ -57,7 +57,7 @@ module Vagrant
 
             def get_logstash_vm_ip
                 ip = get_cluster_info 'cluster_ip'
-                ip % 251
+                ip.strip % 251
             end
 
             def get_logstash_node_name
