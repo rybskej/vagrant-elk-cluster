@@ -60,7 +60,7 @@ _Cluster Nodes :_
 | --------------------------------- | ----------- | ----------------------------------------- |
 | [elasticsearch-mapper-attachments](https://github.com/elasticsearch/elasticsearch-mapper-attachments)  | 2.6.0      |  N.A. |
 |[elasticsearch-head](https://github.com/mobz/elasticsearch-head)| latest| [http://localhost:9200/\_plugin/head/](http://localhost:9200/_plugin/head/) |
-|[elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)| 1.5.5| [http://localhost:9200/\_plugin/marvel](http://localhost:9200/_plugin/kopf) |
+|[elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)| 1.5.5| [http://localhost:9200/\_plugin/kopf](http://localhost:9200/_plugin/kopf) |
 |[elasticsearch-paramedic](https://github.com/karmi/elasticsearch-paramedic)|latest | [http://localhost:9200/\_plugin/paramedic/](http://localhost:9200/_plugin/paramedic/)|
 |[elasticsearch-HQ](https://github.com/royrusso/elasticsearch-HQ) | latest| [http://localhost:9200/\_plugin/HQ/](http://localhost:9200/_plugin/HQ/)|
 |[bigdesk](https://github.com/lukas-vlcek/bigdesk)|latest|[http://localhost:9200/\_plugin/bigdesk](http://localhost:9200/_plugin/bigdesk) |
