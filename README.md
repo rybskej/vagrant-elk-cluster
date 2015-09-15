@@ -83,7 +83,7 @@ _Cluster Nodes :_
 
 **Clone this repository**
 
-`git clone git@github.com:bhaskar_vk/vagrant-elk-cluster.git`
+`git clone https://github.com/bhaskarvk/vagrant-elk-cluster.git`
 
 **Download Installation Files**
 
