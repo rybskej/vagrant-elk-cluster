@@ -1,10 +1,10 @@
 yum -q -y install screen
 
 # Install JAVA
-yum -q -y localinstall /vagrant/jdk-8u45-linux-x64.rpm
+yum -q -y localinstall /vagrant/jdk-8u60-linux-x64.rpm
 
 # Setting ES version to install
-ES_VERSION="elasticsearch-1.6.0"
+ES_VERSION="elasticsearch-1.7.2"
 ES_PLUGIN_INSTALL_CMD="elasticsearch/bin/plugin -s -i"
 
 # Removing all previous potentially installed version
@@ -24,7 +24,7 @@ fi
 mv $ES_VERSION elasticsearch
 
 # Internal ES plugins
-${ES_PLUGIN_INSTALL_CMD} elasticsearch/elasticsearch-mapper-attachments/2.6.0
+${ES_PLUGIN_INSTALL_CMD} elasticsearch/elasticsearch-mapper-attachments/2.7.1
 
 
 # Supervision/Dashboards ES Plugins
@@ -32,4 +32,4 @@ ${ES_PLUGIN_INSTALL_CMD} mobz/elasticsearch-head
 ${ES_PLUGIN_INSTALL_CMD} karmi/elasticsearch-paramedic
 ${ES_PLUGIN_INSTALL_CMD} lukas-vlcek/bigdesk
 ${ES_PLUGIN_INSTALL_CMD} royrusso/elasticsearch-HQ
-${ES_PLUGIN_INSTALL_CMD} lmenezes/elasticsearch-kopf/1.5.5
+${ES_PLUGIN_INSTALL_CMD} lmenezes/elasticsearch-kopf/1.5.7

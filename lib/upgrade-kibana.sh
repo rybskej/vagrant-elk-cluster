@@ -1,7 +1,7 @@
 yum -q -y install screen
 
 # Setting ES version to install
-KIBANA_VERSION="kibana-4.1.1-linux-x64"
+KIBANA_VERSION="kibana-4.1.2-linux-x64"
 
 # Removing all previous potentially installed version
 rm -rf kibana

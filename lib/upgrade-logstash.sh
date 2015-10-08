@@ -1,11 +1,11 @@
 yum -q -y install screen
 
 # Install JAVA
-yum -q -y localinstall /vagrant/jdk-8u45-linux-x64.rpm
+yum -q -y localinstall /vagrant/jdk-8u60-linux-x64.rpm
 
 
 # Setting ES version to install
-LOGSTASH_VERSION="logstash-1.5.2"
+LOGSTASH_VERSION="logstash-1.5.4"
 
 # Removing all previous potentially installed version
 rm -rf logstash
