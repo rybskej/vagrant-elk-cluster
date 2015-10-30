@@ -16,10 +16,10 @@ vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_w
 | Software              | Version     | Description                        |
 | --------------------------------- | ----------- | ----------------------------------------- |
 | CentOS|7.1| Guest OS <br/> VMWare and Virtual box :[chef/centos-7.1](https://atlas.hashicorp.com/chef/boxes/centos-7.1) <br/> & parallels : [parallels/centos-7.1](https://atlas.hashicorp.com/parallels/boxes/centos-7.1) |
-| Java (oracle)              | 1.8.0_45    |    [Download JDK](http://www.oracle.com/technetwork/java/javase/downloads/) |
-| ElasticSearch                     | 1.6.0       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
-| Kibana | 4.1.1 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
-| LogStash | 1.5.2 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
+| Java (oracle)              | 1.8.0_60    |    [Download JDK](http://www.oracle.com/technetwork/java/javase/downloads/) |
+| ElasticSearch                     | 1.7.2       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
+| Kibana | 4.1.2 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
+| LogStash | 1.5.4 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
 
 **Cluster Details**
 
@@ -58,9 +58,9 @@ _Cluster Nodes :_
 
 | Plugin              | Version     | URL To Access                        |
 | --------------------------------- | ----------- | ----------------------------------------- |
-| [elasticsearch-mapper-attachments](https://github.com/elasticsearch/elasticsearch-mapper-attachments)  | 2.6.0      |  N.A. |
+| [elasticsearch-mapper-attachments](https://github.com/elasticsearch/elasticsearch-mapper-attachments)  | 2.7.1      |  N.A. |
 |[elasticsearch-head](https://github.com/mobz/elasticsearch-head)| latest| [http://localhost:9200/\_plugin/head/](http://localhost:9200/_plugin/head/) |
-|[elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)| 1.5.5| [http://localhost:9200/\_plugin/kopf](http://localhost:9200/_plugin/kopf) |
+|[elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)| 1.5.7| [http://localhost:9200/\_plugin/kopf](http://localhost:9200/_plugin/kopf) |
 |[elasticsearch-paramedic](https://github.com/karmi/elasticsearch-paramedic)|latest | [http://localhost:9200/\_plugin/paramedic/](http://localhost:9200/_plugin/paramedic/)|
 |[elasticsearch-HQ](https://github.com/royrusso/elasticsearch-HQ) | latest| [http://localhost:9200/\_plugin/HQ/](http://localhost:9200/_plugin/HQ/)|
 |[bigdesk](https://github.com/lukas-vlcek/bigdesk)|latest|[http://localhost:9200/\_plugin/bigdesk](http://localhost:9200/_plugin/bigdesk) |
@@ -89,10 +89,10 @@ _Cluster Nodes :_
 
 This needs to be done just once.
 
-*	Download JDK 8u45 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
-*	Download elasticsearch-1.6.0.tar.gz from [elastic](https://www.elastic.co/downloads/elasticsearch)
-*	Download kibana-4.1.1-linux-x64.tar.gz from [elastic](https://www.elastic.co/downloads/kibana)
-*	Download logstash-1.5.2.tar.gz from [elastic](https://www.elastic.co/downloads/logstash)
+*	Download JDK 8u60 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
+*	Download elasticsearch-1.7.2.tar.gz from [elastic](https://www.elastic.co/downloads/elasticsearch)
+*	Download kibana-4.1.2-linux-x64.tar.gz from [elastic](https://www.elastic.co/downloads/kibana)
+*	Download logstash-1.5.4.tar.gz from [elastic](https://www.elastic.co/downloads/logstash)
 *	Place all the above files at the root of this repo.
 
 If you need to upgrade any of the above, download respective version and change the version number in `lib/upgrade-es.sh` OR  `lib/upgrade-kibana.sh` Or  `lib/upgrade-logstash.sh` accordingly and re-run provisioning.
