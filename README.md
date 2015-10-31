@@ -1,9 +1,11 @@
 Vagrant ELK (Elasticsearch + Logstash + Kibana) Cluster
 =============================
 
+**For ES 2.0 and above**. For ES 1.x see branch es1.x.
+
 Create an ELK Stack with a single bash command in Vmware, Parallels, or VirtualBox :
 
-```
+```bash
 vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_workstation>
 ```
 <div style='color:red'>**Read Pre Requisites below.**</div>**I would also highly recommend that you read this file in its entirety at least once.**<br/><br/>
@@ -17,9 +19,9 @@ vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_w
 | --------------------------------- | ----------- | ----------------------------------------- |
 | CentOS|7.1| Guest OS <br/> VMWare and Virtual box :[chef/centos-7.1](https://atlas.hashicorp.com/chef/boxes/centos-7.1) <br/> & parallels : [parallels/centos-7.1](https://atlas.hashicorp.com/parallels/boxes/centos-7.1) |
 | Java (oracle)              | 1.8.0_60    |    [Download JDK](http://www.oracle.com/technetwork/java/javase/downloads/) |
-| ElasticSearch                     | 1.7.2       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
-| Kibana | 4.1.2 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
-| LogStash | 1.5.4 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
+| ElasticSearch                     | 2.0.0       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
+| Kibana | 4.2.0 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
+| LogStash | 2.0.0 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
 
 **Cluster Details**
 
@@ -56,14 +58,16 @@ _Cluster Nodes :_
 
 **Elasticsearch Plugins**
 
+
 | Plugin              | Version     | URL To Access                        |
 | --------------------------------- | ----------- | ----------------------------------------- |
-| [elasticsearch-mapper-attachments](https://github.com/elasticsearch/elasticsearch-mapper-attachments)  | 2.7.1      |  N.A. |
-|[elasticsearch-head](https://github.com/mobz/elasticsearch-head)| latest| [http://localhost:9200/\_plugin/head/](http://localhost:9200/_plugin/head/) |
-|[elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)| 1.5.7| [http://localhost:9200/\_plugin/kopf](http://localhost:9200/_plugin/kopf) |
-|[elasticsearch-paramedic](https://github.com/karmi/elasticsearch-paramedic)|latest | [http://localhost:9200/\_plugin/paramedic/](http://localhost:9200/_plugin/paramedic/)|
-|[elasticsearch-HQ](https://github.com/royrusso/elasticsearch-HQ) | latest| [http://localhost:9200/\_plugin/HQ/](http://localhost:9200/_plugin/HQ/)|
-|[bigdesk](https://github.com/lukas-vlcek/bigdesk)|latest|[http://localhost:9200/\_plugin/bigdesk](http://localhost:9200/_plugin/bigdesk) |
+| [elasticsearch-mapper-attachments](https://github.com/elasticsearch/elasticsearch-mapper-attachments)  | 3.0.2      |  N.A. |
+|[elasticsearch-head](https://github.com/mobz/elasticsearch-head)| latest| [http://localhost:9200/\_plugin/head/](http://localhost:9200/_plugin/head/)<br/>__NOT WORKING IN ES 2.0__ |
+|[elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)| 2.0.0| [http://localhost:9200/\_plugin/kopf](http://localhost:9200/_plugin/kopf) |
+|[elasticsearch-paramedic](https://github.com/karmi/elasticsearch-paramedic)|latest | [http://localhost:9200/\_plugin/paramedic/](http://localhost:9200/_plugin/paramedic/)<br/>__NOT WORKING IN ES 2.0__|
+|[elasticsearch-HQ](https://github.com/royrusso/elasticsearch-HQ) | latest| [http://localhost:9200/\_plugin/HQ/](http://localhost:9200/_plugin/HQ/)<br/>__NOT WORKING IN ES 2.0__|
+|[bigdesk](https://github.com/lukas-vlcek/bigdesk)|latest|[http://localhost:9200/\_plugin/bigdesk](http://localhost:9200/_plugin/bigdesk)<br/>__NOT WORKING IN ES 2.0__ |
+|[Sense](https://www.elastic.co/guide/en/sense/current/index.html)|2.0.0|[http://localhost:5601/app/sense](http://localhost:5601/app/sense)|
 
 <br/>
 
@@ -89,10 +93,10 @@ _Cluster Nodes :_
 
 This needs to be done just once.
 
-*	Download JDK 8u60 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
-*	Download elasticsearch-1.7.2.tar.gz from [elastic](https://www.elastic.co/downloads/elasticsearch)
-*	Download kibana-4.1.2-linux-x64.tar.gz from [elastic](https://www.elastic.co/downloads/kibana)
-*	Download logstash-1.5.4.tar.gz from [elastic](https://www.elastic.co/downloads/logstash)
+*	Download JDK 8u65 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
+*	Download elasticsearch-2.0.0.tar.gz from [elastic](https://www.elastic.co/downloads/elasticsearch)
+*	Download kibana-4.2.0-linux-x64.tar.gz from [elastic](https://www.elastic.co/downloads/kibana)
+*	Download logstash-2.0.0.tar.gz from [elastic](https://www.elastic.co/downloads/logstash)
 *	Place all the above files at the root of this repo.
 
 If you need to upgrade any of the above, download respective version and change the version number in `lib/upgrade-es.sh` OR  `lib/upgrade-kibana.sh` Or  `lib/upgrade-logstash.sh` accordingly and re-run provisioning.
@@ -106,7 +110,7 @@ If you need to upgrade any of the above, download respective version and change 
 Simply go in the cloned directory (vagrant-elk-cluster by default).
 Execute this command :
 
-```
+```bash
 vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_workstation>
 ```
 
@@ -117,31 +121,31 @@ You can start a maximum of 5 Elasticsearch nodes. If you want you can increase t
 
 You can change the cluster size with the `CLUSTER_COUNT` variable (min 1 and max 5):
 
-```
+```bash
 CLUSTER_COUNT=5 vagrant up 
 ```
 
 You can change the cluster name with the `CLUSTER_NAME` variable:
 
-```
+```bash
 CLUSTER_NAME='es-qa-cluster' vagrant up
 ```
 
 You can change the cluster RAM used for each node with the `CLUSTER_RAM` variable:
 
-```
+```bash
 CLUSTER_RAM=512 vagrant up
 ```
 
 You can change the cluster CPU used for each node with the `CLUSTER_CPU` variable:
 
-```
+```bash
 CLUSTER_CPU=2 vagrant up
 ```
 
 You can change the cluster network IP address with the `CLUSTER_IP_PATTERN` variable:
 
-```
+```bash
 CLUSTER_IP_PATTERN='172.16.15.%d' vagrant up
 ```
 
@@ -150,7 +154,7 @@ Vagrant will save/cache these values under the `.vagrant` directory, so you can 
 
 Of course you can use all these variables at the same time :
 
-```
+```bash
 $ CLUSTER_NAME='es-qa-cluster' CLUSTER_IP_PATTERN='172.16.25.%d' CLUSTER_COUNT=5 \
 CLUSTER_RAM=512 CLUSTER_CPU=2 vagrant up
 ```
@@ -191,13 +195,13 @@ The command is launched into a new screen as root user inside the vagrant.
 
 **Stop the cluster**
 
-```
+```bash
 vagrant halt
 ```
 
 This will stop the whole cluster. If you want to only stop one VM, you can use:
 
-```
+```bash
 vagrant halt vm2
 ```
 
@@ -205,14 +209,14 @@ This will stop the `vm2` instance.
 
 **Destroy the cluster**
 
-```
+```bash
 vagrant destroy
-rm -rf conf/elasticsearch-vm* log/* data/* 
+rm -rf .vagrant conf/*.yml conf/*.conf logs/* data/* 
 ```
 
 This will stop the whole cluster. If you want to only stop one VM, you can use:
 
-```
+```bash
 vagrant destroy vm2
 ```
 
@@ -244,7 +248,7 @@ By default the `data`, `logs` and `config` directories live outside of the VMs o
 The 9200 and 9300 ports of the host machine have been setup to forward to respective ports of ES Client Node running on Kibana.
 To access ES Rest API from Host machine you can use [**http://localhost:9200/**](http://localhost:9200/) which will route the API Access via the Client Node running on the Kibana Node.
 
-TO access ES Rest Endpoint on a data node, use 9200 + \<node number> on the host machine. so for vm1it would be  9201 so [http://localhost:9201/](http://localhost:9201/) and 9202 for vm2, and so forth. But you will hardly need to access these endpoints from host machine.
+TO access ES Rest Endpoint on a data node, use 9200 + \<node number> on the host machine. so for vm1 it would be  9201 so [http://localhost:9201/](http://localhost:9201/) and 9202 for vm2, and so forth. But you will hardly need to access these endpoints from host machine.
 
 To access Kibana from host machine use [**http://localhost:5601/**](http://localhost:5601/). Logstash node has been setup to receive syslog messages on port 5514 (TCP & UDP) and the host machine will forward anything on its port 5514 (TCP & UDP) to these ports.
 
@@ -266,28 +270,17 @@ Similarly for logstash you need to change conf/logstash-<VM Name>.conf file agai
 
 Here are a few sample calls to get you started.
 
-**Create a "subscriptions" index with 5 shards and 2 replicas**
+Send some sample syslog messages to Logstash to be indexed in Elasticsearch.
 
-```
-curl -XPUT 'http://localhost:9200/subscriptions/' -d '{
-    "settings" : {
-        "number_of_shards" : 5,
-        "number_of_replicas" : 2
-    }
-}'
-```
-
-**Index a "subscription" document inside the "subscriptions" index**
-
-```
-curl -XPUT 'http://localhost:9200/subscriptions/subscription/1' -d '{
-    "user" : "ypereirareis",
-    "post_date" : "2014-03-26T14:12:12",
-    "message" : "Trying out vagrant elasticsearch cluster"
-}'
+```bash
+# From the host machine
+# I'm assuming the host is some sort of UNIX box
+# If windows, then you are on your own :)
+echo "<133>$0[$$]: Test syslog message from Netcat" | nc -4 localhost 5514
+echo "<133>$0[$$]: Second Test syslog message from Netcat" | nc -4 localhost 5514
 ```
 
-You can now perform any action/request authorized by elasticsearch API (index, get, delete, bulk,...)
+Next go to Kibana Dashboard at [http://localhost:5601/](http://localhost:5601/). Kibana will auto discover the logstash index and ask you some basic question, just select the default, and then go to the discover tab. You should see the two sample messages.
 
 ---
 

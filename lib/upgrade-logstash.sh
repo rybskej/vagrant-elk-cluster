@@ -1,11 +1,11 @@
 yum -q -y install screen
 
 # Install JAVA
-yum -q -y localinstall /vagrant/jdk-8u60-linux-x64.rpm
+yum -q -y localinstall /vagrant/jdk-8u65-linux-x64.rpm
 
 
 # Setting ES version to install
-LOGSTASH_VERSION="logstash-1.5.4"
+LOGSTASH_VERSION="logstash-2.0.0"
 
 # Removing all previous potentially installed version
 rm -rf logstash
@@ -23,3 +23,9 @@ fi
 # Renaming extracted folder to a generic name to avoid changing commands 
 mv $LOGSTASH_VERSION logstash
 
+chown -R vagrant: logstash
+
+firewall-cmd --zone=public --add-port=5514/tcp --permanent
+firewall-cmd --zone=public --add-port=5514/udp --permanent
+systemctl stop firewalld
+systemctl start firewalld

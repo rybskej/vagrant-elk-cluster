@@ -1,7 +1,8 @@
 yum -q -y install screen
 
 # Setting ES version to install
-KIBANA_VERSION="kibana-4.1.2-linux-x64"
+KIBANA_VERSION="kibana-4.2.0-linux-x64"
+KIBANA_PLUGIN_INSTALL_CMD="kibana/bin/kibana plugin --install"
 
 # Removing all previous potentially installed version
 rm -rf kibana
@@ -18,4 +19,12 @@ fi
 
 # Renaming extracted folder to a generic name to avoid changing commands 
 mv $KIBANA_VERSION kibana
+${KIBANA_PLUGIN_INSTALL_CMD} elastic/sense
 
+chown -R vagrant: kibana
+
+firewall-cmd --zone=public --add-port=9200/tcp --permanent
+firewall-cmd --zone=public --add-port=9300/tcp --permanent
+firewall-cmd --zone=public --add-port=5601/tcp --permanent
+systemctl stop firewalld
+systemctl start firewalld

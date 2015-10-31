@@ -98,6 +98,7 @@ module Vagrant
 
                 File.open(conf_file_format, 'w') do |file|
                     @vm_name = vm
+                    @node01_ip = get_vm_ip 1
                     @node_ip = get_vm_ip index
                     @node_name = get_node_name index
                     @node_master = true
