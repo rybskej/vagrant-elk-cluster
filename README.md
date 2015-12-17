@@ -18,10 +18,10 @@ vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_w
 | Software              | Version     | Description                        |
 | --------------------------------- | ----------- | ----------------------------------------- |
 | CentOS|7.1| Guest OS <br/> VMWare and Virtual box :[chef/centos-7.1](https://atlas.hashicorp.com/chef/boxes/centos-7.1) <br/> & parallels : [parallels/centos-7.1](https://atlas.hashicorp.com/parallels/boxes/centos-7.1) |
-| Java (oracle)              | 1.8.0_60    |    [Download JDK](http://www.oracle.com/technetwork/java/javase/downloads/) |
-| ElasticSearch                     | 2.0.0       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
-| Kibana | 4.2.0 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
-| LogStash | 2.0.0 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
+| Java (oracle)              | 1.8.0_65    |    [Download JDK](http://www.oracle.com/technetwork/java/javase/downloads/) |
+| ElasticSearch                     | 2.1.0       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
+| Kibana | 4.3.0 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
+| LogStash | 2.1.0 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
 
 **Cluster Details**
 
@@ -94,9 +94,9 @@ _Cluster Nodes :_
 This needs to be done just once.
 
 *	Download JDK 8u65 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
-*	Download elasticsearch-2.0.0.tar.gz from [elastic](https://www.elastic.co/downloads/elasticsearch)
-*	Download kibana-4.2.0-linux-x64.tar.gz from [elastic](https://www.elastic.co/downloads/kibana)
-*	Download logstash-2.0.0.tar.gz from [elastic](https://www.elastic.co/downloads/logstash)
+*	Download elasticsearch-2.1.0.tar.gz from [elastic](https://www.elastic.co/downloads/elasticsearch)
+*	Download kibana-4.3.0-linux-x64.tar.gz from [elastic](https://www.elastic.co/downloads/kibana)
+*	Download logstash-2.1.0.tar.gz from [elastic](https://www.elastic.co/downloads/logstash)
 *	Place all the above files at the root of this repo.
 
 If you need to upgrade any of the above, download respective version and change the version number in `lib/upgrade-es.sh` OR  `lib/upgrade-kibana.sh` Or  `lib/upgrade-logstash.sh` accordingly and re-run provisioning.

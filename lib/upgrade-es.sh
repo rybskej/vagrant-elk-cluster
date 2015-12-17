@@ -4,7 +4,7 @@ yum -q -y install screen
 yum -q -y localinstall /vagrant/jdk-8u65-linux-x64.rpm
 
 # Setting ES version to install
-ES_VERSION="elasticsearch-2.0.0"
+ES_VERSION="elasticsearch-2.1.0"
 ES_PLUGIN_INSTALL_CMD="elasticsearch/bin/plugin install"
 
 # Removing all previous potentially installed version

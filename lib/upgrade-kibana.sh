@@ -1,7 +1,7 @@
 yum -q -y install screen
 
 # Setting ES version to install
-KIBANA_VERSION="kibana-4.2.0-linux-x64"
+KIBANA_VERSION="kibana-4.3.0-linux-x64"
 KIBANA_PLUGIN_INSTALL_CMD="kibana/bin/kibana plugin --install"
 
 # Removing all previous potentially installed version
