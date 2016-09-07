@@ -1,7 +1,8 @@
 yum -q -y install screen
+yum -q -y install wget
 
 # Setting ES version to install
-KIBANA_VERSION="kibana-4.3.0-linux-x64"
+KIBANA_VERSION="kibana-4.5.4-linux-x64"
 KIBANA_PLUGIN_INSTALL_CMD="kibana/bin/kibana plugin --install"
 
 # Removing all previous potentially installed version

@@ -1,11 +1,14 @@
 yum -q -y install screen
+yum -q -y install wget
 
 # Install JAVA
-yum -q -y localinstall /vagrant/jdk-8u65-linux-x64.rpm
-
+if [ ! -f "/vagrant/jdk-8u101-linux-x64.rpm" ]; then
+  wget -q "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.rpm" /vagrant/.
+fi
+yum -q -y localinstall /vagrant/jdk-8u101-linux-x64.rpm
 
 # Setting ES version to install
-LOGSTASH_VERSION="logstash-2.1.0"
+LOGSTASH_VERSION="logstash-2.3.4"
 
 # Removing all previous potentially installed version
 rm -rf logstash

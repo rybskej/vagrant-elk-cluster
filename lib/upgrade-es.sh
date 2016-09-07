@@ -1,10 +1,15 @@
 yum -q -y install screen
+yum -q -y install wget
 
 # Install JAVA
-yum -q -y localinstall /vagrant/jdk-8u65-linux-x64.rpm
+if [ ! -f "/vagrant/jdk-8u101-linux-x64.rpm" ]; then
+  wget -q "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.rpm" /vagrant/.
+fi
+yum -q -y localinstall /vagrant/jdk-8u101-linux-x64.rpm
 
 # Setting ES version to install
-ES_VERSION="elasticsearch-2.1.0"
+ES_VERSION="elasticsearch-2.3.3"
+ES_VERSION_URL="https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.3/${ES_VERSION}.tar.gz"
 ES_PLUGIN_INSTALL_CMD="elasticsearch/bin/plugin install"
 
 # Removing all previous potentially installed version
@@ -13,7 +18,7 @@ rm -rf elasticsearch-*
 
 # Downloading the version to install
 if [ ! -f "/vagrant/$ES_VERSION.tar.gz" ]; then
-    wget -q https://download.elasticsearch.org/elasticsearch/elasticsearch/$ES_VERSION.tar.gz
+    wget -q $ES_VERSION_URL
     tar -zxf $ES_VERSION.tar.gz
     rm -rf $ES_VERSION.tar.gz
 else
@@ -23,16 +28,34 @@ fi
 # Renaming extracted folder to a generic name to avoid changing ES commands (elasticsearch/bin/...)
 mv $ES_VERSION elasticsearch
 
-# Internal ES plugins
-${ES_PLUGIN_INSTALL_CMD} elasticsearch/elasticsearch-mapper-attachments/3.0.2
+#############
+# Plugins
 
+ESPLUGINS=()
 
-# Supervision/Dashboards ES Plugins
-${ES_PLUGIN_INSTALL_CMD} mobz/elasticsearch-head
-${ES_PLUGIN_INSTALL_CMD} karmi/elasticsearch-paramedic
-${ES_PLUGIN_INSTALL_CMD} lukas-vlcek/bigdesk
-${ES_PLUGIN_INSTALL_CMD} royrusso/elasticsearch-HQ
-${ES_PLUGIN_INSTALL_CMD} lmenezes/elasticsearch-kopf/2.0.0
+#Analysis plugins
+ESPLUGINS+=(analysis-icu)
+ESPLUGINS+=(analysis-kuromoji)
+ESPLUGINS+=(analysis-smartcn)
+ESPLUGINS+=(analysis-stempel)
+
+#Monitoring
+ESPLUGINS+=(mobz/elasticsearch-head/)
+ESPLUGINS+=(polyfractal/elasticsearch-inquisitor)
+#ESPLUGINS+=(com.automattic/elasticsearch-statsd/2.3.3.0)
+ESPLUGINS+=(xyu/elasticsearch-whatson/0.1.4)
+
+#Extensions
+ESPLUGINS+=(http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-langdetect/2.3.3.0/elasticsearch-langdetect-2.3.3.0-plugin.zip)
+ESPLUGINS+=(delete-by-query)
+#ESPLUGINS+=(graph)
+ESPLUGINS+=(lang-javascript)
+#ESPLUGINS+=(license)
+
+for P in ${ESPLUGINS[*]}
+do
+	${ES_PLUGIN_INSTALL_CMD} $P
+done
 
 chown -R vagrant: elasticsearch
 

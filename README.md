@@ -1,7 +1,9 @@
-Vagrant ELK (Elasticsearch + Logstash + Kibana) Cluster
+Vagrant WordPress + ELK (Elasticsearch + Logstash + Kibana) Cluster
 =============================
 
-**For ES 2.0 and above**. For ES 1.x see branch es1.x.
+This fork of an ELK Vagrant Cluster is customized for use with WordPress development.
+
+**For ES 2.0 and above**
 
 Create an ELK Stack with a single bash command in Vmware, Parallels, or VirtualBox :
 
@@ -18,10 +20,10 @@ vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_w
 | Software              | Version     | Description                        |
 | --------------------------------- | ----------- | ----------------------------------------- |
 | CentOS|7.1| Guest OS <br/> VMWare and Virtual box :[chef/centos-7.1](https://atlas.hashicorp.com/chef/boxes/centos-7.1) <br/> & parallels : [parallels/centos-7.1](https://atlas.hashicorp.com/parallels/boxes/centos-7.1) |
-| Java (oracle)              | 1.8.0_65    |    [Download JDK](http://www.oracle.com/technetwork/java/javase/downloads/) |
-| ElasticSearch                     | 2.1.0       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
-| Kibana | 4.3.0 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
-| LogStash | 2.1.0 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
+| Java (oracle)              | 1.8.0_101    |     |
+| ElasticSearch                     | 2.3.3       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
+| Kibana | 4.5.4 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
+| LogStash | 2.3.3 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
 
 **Cluster Details**
 
@@ -61,13 +63,16 @@ _Cluster Nodes :_
 
 | Plugin              | Version     | URL To Access                        |
 | --------------------------------- | ----------- | ----------------------------------------- |
-| [elasticsearch-mapper-attachments](https://github.com/elasticsearch/elasticsearch-mapper-attachments)  | 3.0.2      |  N.A. |
-|[elasticsearch-head](https://github.com/mobz/elasticsearch-head)| latest| [http://localhost:9200/\_plugin/head/](http://localhost:9200/_plugin/head/)<br/>__NOT WORKING IN ES 2.0__ |
-|[elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)| 2.0.0| [http://localhost:9200/\_plugin/kopf](http://localhost:9200/_plugin/kopf) |
-|[elasticsearch-paramedic](https://github.com/karmi/elasticsearch-paramedic)|latest | [http://localhost:9200/\_plugin/paramedic/](http://localhost:9200/_plugin/paramedic/)<br/>__NOT WORKING IN ES 2.0__|
-|[elasticsearch-HQ](https://github.com/royrusso/elasticsearch-HQ) | latest| [http://localhost:9200/\_plugin/HQ/](http://localhost:9200/_plugin/HQ/)<br/>__NOT WORKING IN ES 2.0__|
-|[bigdesk](https://github.com/lukas-vlcek/bigdesk)|latest|[http://localhost:9200/\_plugin/bigdesk](http://localhost:9200/_plugin/bigdesk)<br/>__NOT WORKING IN ES 2.0__ |
-|[Sense](https://www.elastic.co/guide/en/sense/current/index.html)|2.0.0|[http://localhost:5601/app/sense](http://localhost:5601/app/sense)|
+|analysis-icu | | |
+|analysis-kuromoji | | |
+|analysis-smartcn | | |
+|analysis-stempel | | |
+|mobz/elasticsearch-head | | |
+|polyfractal/elasticsearch-inquisitor | | |
+|xyu/elasticsearch-whatson/0.1.4 | | |
+|[langdetect]http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-langdetect/2.3.3.0/elasticsearch-langdetect-2.3.3.0-plugin.zip] | | |
+|delete-by-query | | |
+|lang-javascript | | |
 
 <br/>
 
@@ -87,16 +92,16 @@ _Cluster Nodes :_
 
 **Clone this repository**
 
-`git clone https://github.com/bhaskarvk/vagrant-elk-cluster.git`
+`git clone https://github.com/gibrown/vagrant-elk-wp-cluster.git`
 
 **Download Installation Files**
 
-This needs to be done just once.
+This needs to be done just once (this should all get done for you).
 
-*	Download JDK 8u65 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
-*	Download elasticsearch-2.1.0.tar.gz from [elastic](https://www.elastic.co/downloads/elasticsearch)
-*	Download kibana-4.3.0-linux-x64.tar.gz from [elastic](https://www.elastic.co/downloads/kibana)
-*	Download logstash-2.1.0.tar.gz from [elastic](https://www.elastic.co/downloads/logstash)
+*	Download JDK 8u101 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
+*	Download elasticsearch from [elastic](https://www.elastic.co/downloads/elasticsearch)
+*	Download kibana from [elastic](https://www.elastic.co/downloads/kibana)
+*	Download logstash from [elastic](https://www.elastic.co/downloads/logstash)
 *	Place all the above files at the root of this repo.
 
 If you need to upgrade any of the above, download respective version and change the version number in `lib/upgrade-es.sh` OR  `lib/upgrade-kibana.sh` Or  `lib/upgrade-logstash.sh` accordingly and re-run provisioning.
