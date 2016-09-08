@@ -3,7 +3,7 @@ yum -q -y install wget
 
 # Install JAVA
 if [ ! -f "/vagrant/jdk-8u101-linux-x64.rpm" ]; then
-  wget -q "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.rpm" /vagrant/.
+    curl --silent -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.rpm -o /vagrant/jdk-8u101-linux-x64.rpm --retry 999 --retry-max-time 0 -C -
 fi
 yum -q -y localinstall /vagrant/jdk-8u101-linux-x64.rpm
 
