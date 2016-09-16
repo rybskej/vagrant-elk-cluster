@@ -24,6 +24,9 @@ Vagrant.configure("2") do |config|
     #config.vm.box = 'chef/centos-7.1'
     config.vm.box = 'bhaskarvk/centos7-x86_64'
 
+    # Workaround for SSH authentication failure in Vagrant 1.8.5
+    config.ssh.insert_key = false
+
     # Virtualbox
     config.vm.provider 'virtualbox' do |vbox, override|
         override.vm.synced_folder ".", "/vagrant", :id => "vagrant-root",
