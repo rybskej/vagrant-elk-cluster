@@ -21,8 +21,8 @@ Vagrant.configure("2") do |config|
     cluster_cpu = utils.get_cluster_info 'cluster_cpu'
     cluster_cpu = cluster_cpu.to_i
 
-    #config.vm.box = 'chef/centos-7.1'
-    config.vm.box = 'bhaskarvk/centos7-x86_64'
+    config.vm.box = 'bento/centos-7.1'
+    #config.vm.box = 'bhaskarvk/centos7-x86_64'
 
     # Workaround for SSH authentication failure in Vagrant 1.8.5
     config.ssh.insert_key = false

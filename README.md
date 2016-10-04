@@ -1,7 +1,5 @@
-Vagrant WordPress + ELK (Elasticsearch + Logstash + Kibana) Cluster
+Vagrant ELK (Elasticsearch + Logstash + Kibana) Cluster
 =============================
-
-This fork of an ELK Vagrant Cluster is customized for use with WordPress development.
 
 **For ES 2.0 and above**
 
@@ -21,9 +19,9 @@ vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_w
 | --------------------------------- | ----------- | ----------------------------------------- |
 | CentOS|7.1| Guest OS <br/> VMWare and Virtual box :[chef/centos-7.1](https://atlas.hashicorp.com/chef/boxes/centos-7.1) <br/> & parallels : [parallels/centos-7.1](https://atlas.hashicorp.com/parallels/boxes/centos-7.1) |
 | Java (oracle)              | 1.8.0_101    |     |
-| ElasticSearch                     | 2.3.3       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
-| Kibana | 4.5.4 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
-| LogStash | 2.3.3 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
+| ElasticSearch                     | 2.4.1       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
+| Kibana | 4.6.1 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
+| LogStash | 2.4.0 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
 
 **Cluster Details**
 
@@ -61,18 +59,16 @@ _Cluster Nodes :_
 **Elasticsearch Plugins**
 
 
-| Plugin              | Version     | URL To Access                        |
-| --------------------------------- | ----------- | ----------------------------------------- |
-|analysis-icu | | |
-|analysis-kuromoji | | |
-|analysis-smartcn | | |
-|analysis-stempel | | |
-|mobz/elasticsearch-head | | |
-|polyfractal/elasticsearch-inquisitor | | |
-|xyu/elasticsearch-whatson/0.1.4 | | |
-|[langdetect]http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-langdetect/2.3.3.0/elasticsearch-langdetect-2.3.3.0-plugin.zip] | | |
-|delete-by-query | | |
-|lang-javascript | | |
+| Plugin              | Version     | URL To Access |
+| ------------------- | ----------- | ------------- |
+| mapper-attachments  | latest      | N.A. |
+| analysis-icu        | latest      | N.A. |
+| lang-javascript     | latest      | N.A. |
+|[elasticsearch-head](https://github.com/mobz/elasticsearch-head)| latest| [http://localhost:9200/\_plugin/head/](http://localhost:9200/_plugin/head/) |
+|[elasticsearch-kopf](https://github.com/lmenezes/elasticsearch-kopf)| 2.1.2| [http://localhost:9200/\_plugin/kopf](http://localhost:9200/_plugin/kopf) |
+|[elasticsearch-paramedic](https://github.com/karmi/elasticsearch-paramedic)|latest | [http://localhost:9200/\_plugin/paramedic/](http://localhost:9200/_plugin/paramedic/) |
+|[elasticsearch-HQ](https://github.com/royrusso/elasticsearch-HQ) | latest| [http://localhost:9200/\_plugin/HQ/](http://localhost:9200/_plugin/HQ/) |
+|[Sense](https://www.elastic.co/guide/en/sense/current/index.html)|latest|[http://localhost:5601/app/sense](http://localhost:5601/app/sense)|
 
 <br/>
 
@@ -92,7 +88,7 @@ _Cluster Nodes :_
 
 **Clone this repository**
 
-`git clone https://github.com/gibrown/vagrant-elk-wp-cluster.git`
+`git clone https://github.com/bhaskarvk/vagrant-elk-cluster.git`
 
 **Download Installation Files**
 
