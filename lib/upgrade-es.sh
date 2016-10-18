@@ -38,7 +38,7 @@ mv $ES_DIR elasticsearch
 ESPLUGINS=()
 
 ESPLUGINS+=(analysis-icu)
-ESPLUGINS+=(mapper-attachments)
+#ESPLUGINS+=(mapper-attachments)
 
 #Monitoring
 ESPLUGINS+=(mobz/elasticsearch-head)
@@ -46,7 +46,7 @@ ESPLUGINS+=(lmenezes/elasticsearch-kopf)
 ESPLUGINS+=(karmi/elasticsearch-paramedic)
 ESPLUGINS+=(royrusso/elasticsearch-HQ)
 
-ESPLUGINS+=(lang-javascript)
+#ESPLUGINS+=(lang-javascript)
 
 for P in ${ESPLUGINS[*]}
 do
