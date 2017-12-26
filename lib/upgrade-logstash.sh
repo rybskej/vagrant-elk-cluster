@@ -2,13 +2,20 @@ yum -q -y install screen
 yum -q -y install wget
 
 # Install JAVA
-if [ ! -f "/vagrant/jdk-8u101-linux-x64.rpm" ]; then
-    curl --silent -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.rpm -o /vagrant/jdk-8u101-linux-x64.rpm --retry 999 --retry-max-time 0 -C -
+# Oracle changed the way to download Java. Hardcoding for jdk-8u151, to be fixed.
+JAVA_VERSION_MAJOR=8
+JAVA_VERSION_MINOR=151
+JAVA_VERSION_BUILD=12
+JAVA_DOWNLOAD_HASH=e758a0de34e24606bca991d704f6dcbf
+if [ ! -f "/vagrant/jdk-8u151-linux-x64.rpm" ]; then
+    wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+     http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_DOWNLOAD_HASH}/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.rpm \
+     -O /vagrant/jdk-8u151-linux-x64.rpm
 fi
-yum -q -y localinstall /vagrant/jdk-8u101-linux-x64.rpm
+yum -q -y localinstall /vagrant/jdk-8u151-linux-x64.rpm
 
 # Setting ES version to install
-LOGSTASH_VERSION="logstash-2.4.0"
+LOGSTASH_VERSION="logstash-6.1.0"
 
 # Removing all previous potentially installed version
 rm -rf logstash
@@ -16,7 +23,7 @@ rm -rf logstash-*
 
 # Downloading the version to install
 if [ ! -f "/vagrant/$LOGSTASH_VERSION.tar.gz" ]; then
-    wget -q https://download.elastic.co/logstash/logstash/${LOGSTASH_VERSION}.tar.gz
+    wget -q https://artifacts.elastic.co/downloads/logstash/${LOGSTASH_VERSION}.tar.gz
     tar -zxf $LOGSTASH_VERSION.tar.gz
     rm -rf $LOGSTASH_VERSION.tar.gz
 else

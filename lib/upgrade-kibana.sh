@@ -2,8 +2,8 @@ yum -q -y install screen
 yum -q -y install wget
 
 # Setting ES version to install
-KIBANA_VERSION="kibana-4.6.1-linux-x86_64"
-KIBANA_PLUGIN_INSTALL_CMD="kibana/bin/kibana plugin --install"
+KIBANA_VERSION="kibana-6.1.0-linux-x86_64"
+KIBANA_PLUGIN_INSTALL_CMD="kibana/bin/kibana-plugin install"
 
 # Removing all previous potentially installed version
 rm -rf kibana
@@ -11,7 +11,7 @@ rm -rf kibana-*
 
 # Downloading the version to install
 if [ ! -f "/vagrant/$KIBANA_VERSION.tar.gz" ]; then
-    wget -q https://download.elastic.co/kibana/kibana/${KIBANA_VERSION}.tar.gz
+    wget -q https://artifacts.elastic.co/downloads/kibana/${KIBANA_VERSION}.tar.gz
     tar -zxf $KIBANA_VERSION.tar.gz
     rm -rf $KIBANA_VERSION.tar.gz
 else
