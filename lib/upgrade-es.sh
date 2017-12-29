@@ -15,7 +15,7 @@ fi
 yum -q -y localinstall /vagrant/jdk-8u151-linux-x64.rpm
 
 # Setting ES version to install
-ES_VERSION="6.1.0"
+ES_VERSION="6.1.1"
 ES_TGZ="elasticsearch-${ES_VERSION}.tar.gz"
 ES_DIR="elasticsearch-${ES_VERSION}"
 ES_VERSION_URL="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz"

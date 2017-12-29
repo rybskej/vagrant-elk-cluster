@@ -15,7 +15,7 @@ fi
 yum -q -y localinstall /vagrant/jdk-8u151-linux-x64.rpm
 
 # Setting ES version to install
-LOGSTASH_VERSION="logstash-6.1.0"
+LOGSTASH_VERSION="logstash-6.1.1"
 
 # Removing all previous potentially installed version
 rm -rf logstash
