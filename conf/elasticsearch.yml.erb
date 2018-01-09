@@ -37,8 +37,9 @@ node.data: <%= @node_data %>
 #
 # node.rack: r1
 #
-index.number_of_shards: 3
-index.number_of_replicas: 2
+# Index level settings is deprecated on configuration since ELK 5.x, removing them.
+#index.number_of_shards: 3
+#index.number_of_replicas: 2
 # ----------------------------------- Paths ------------------------------------
 #
 # Path to directory where to store the data (separate multiple locations by comma):
