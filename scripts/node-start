@@ -12,6 +12,8 @@ else
     cp /vagrant/conf/elasticsearch-$VM_NAME.yml elasticsearch/config/elasticsearch.yml
     chown vagrant: elasticsearch/config/elasticsearch.yml
     sudo sysctl -w vm.max_map_count=262144
+    sudo echo "vagrant  -  nofile  65536" >> /etc/security/limits.conf
+    sudo echo "vagrant  -  nproc   4096" >> /etc/security/limits.conf
 
     screen -S elastic -d -m bash -l -c "su - vagrant -c \"ES_JAVA_OPTS='-Djava.net.preferIPv4Stack=true'  elasticsearch > /vagrant/logs/elasticsearch-$VM_NAME.log 2>&1\""
     echo "-----------------------------------------------------------------------------------------------------------"
