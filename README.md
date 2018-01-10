@@ -1,9 +1,9 @@
 Vagrant ELK (Elasticsearch + Logstash + Kibana) Cluster
 =============================
 
-**For ES 2.0 and above**
+**Modified for ES 6.1 and above**
 
-Create an ELK Stack with a single bash command in Vmware, Parallels, or VirtualBox :
+Create an ELK Stack with a single bash command in Vmware, Parallels, or VirtualBox (current version tested on VirtualBox) :
 
 ```bash
 vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_workstation>
@@ -18,10 +18,10 @@ vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_w
 | Software              | Version     | Description                        |
 | --------------------------------- | ----------- | ----------------------------------------- |
 | CentOS|7.1| Guest OS <br/> VMWare and Virtual box :[chef/centos-7.1](https://atlas.hashicorp.com/chef/boxes/centos-7.1) <br/> & parallels : [parallels/centos-7.1](https://atlas.hashicorp.com/parallels/boxes/centos-7.1) |
-| Java (oracle)              | 1.8.0_101    |     |
-| ElasticSearch                     | 2.4.1       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
-| Kibana | 4.6.1 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
-| LogStash | 2.4.0 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
+| Java (oracle)              | 1.8.0_151    |     |
+| ElasticSearch                     | 6.1.1       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
+| Kibana | 6.1.1 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
+| LogStash | 6.1.1 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
 
 **Cluster Details**
 
@@ -56,7 +56,7 @@ _Cluster Nodes :_
 **WARNING**:  You'll need enough RAM to run VMs in your cluster. Each new VM launched within your cluster will have 1024M of RAM allocated.
 
 
-**Elasticsearch Plugins**
+**Elasticsearch Plugins (to be revisited, some of them are deprecated)**
 
 
 | Plugin              | Version     | URL To Access |
@@ -88,13 +88,13 @@ _Cluster Nodes :_
 
 **Clone this repository**
 
-`git clone https://github.com/bhaskarvk/vagrant-elk-cluster.git`
+`git clone https://github.com/pythiangonzalez/vagrant-elk-cluster.git`
 
 **Download Installation Files**
 
-This needs to be done just once (this should all get done for you).
+This needs to be done just once (this gets all done for you).
 
-*	Download JDK 8u101 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
+*	Download JDK 8u151 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
 *	Download elasticsearch from [elastic](https://www.elastic.co/downloads/elasticsearch)
 *	Download kibana from [elastic](https://www.elastic.co/downloads/kibana)
 *	Download logstash from [elastic](https://www.elastic.co/downloads/logstash)
@@ -123,7 +123,7 @@ You can start a maximum of 5 Elasticsearch nodes. If you want you can increase t
 You can change the cluster size with the `CLUSTER_COUNT` variable (min 1 and max 5):
 
 ```bash
-CLUSTER_COUNT=5 vagrant up 
+CLUSTER_COUNT=5 vagrant up
 ```
 
 You can change the cluster name with the `CLUSTER_NAME` variable:
@@ -212,7 +212,7 @@ This will stop the `vm2` instance.
 
 ```bash
 vagrant destroy
-rm -rf .vagrant conf/*.yml conf/*.conf logs/* data/* 
+rm -rf .vagrant conf/*.yml conf/*.conf logs/* data/*
 ```
 
 This will stop the whole cluster. If you want to only stop one VM, you can use:
@@ -288,4 +288,3 @@ Next go to Kibana Dashboard at [http://localhost:5601/](http://localhost:5601/).
 **TODO**
 
 See issues.
-
