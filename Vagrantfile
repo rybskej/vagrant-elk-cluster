@@ -36,6 +36,14 @@ Vagrant.configure("2") do |config|
         vbox.gui = false
     end
 
+    # Libvirt
+    config.vm.provider :libvirt do |libvirt|
+        config.vm.box = 'magneticone/centos-7'
+        libvirt.uri = 'qemu:///system'
+        libvirt.memory = cluster_ram
+        libvirt.cpus = cluster_cpu
+    end
+
     # Parallels
     config.vm.provider "parallels" do |v, override|
         override.vm.box = "parallels/centos-7.1"
