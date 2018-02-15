@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
 
     # Libvirt
     config.vm.provider :libvirt do |libvirt|
-        config.vm.box = 'magneticone/centos-7'
+        override.vm.box = 'magneticone/centos-7'
         libvirt.uri = 'qemu:///system'
         libvirt.memory = cluster_ram
         libvirt.cpus = cluster_cpu
