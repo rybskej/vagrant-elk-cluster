@@ -1,27 +1,27 @@
 Vagrant ELK (Elasticsearch + Logstash + Kibana) Cluster
 =============================
 
-**Modified for ES 6.1 and above**
+**ELK 6.2 on CentOS 7**
 
-Create an ELK Stack with a single bash command in Vmware, Parallels, or VirtualBox (current version tested on VirtualBox) :
+Create an ELK Stack with a single bash command in Vmware, Parallels, VirtualBox, or libvirt :
 
 ```bash
-vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_workstation>
+vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_workstation|libvirt>
 ```
-<div style='color:red'>**Read Pre Requisites below.**</div>**I would also highly recommend that you read this file in its entirety at least once.**<br/><br/>
+<div style='color:red'>**Read Prerequisites below.**</div>**I would also highly recommend that you read this file in its entirety at least once.**<br/><br/>
 
 ---
 
 
-**Software versions information**
+**Software version information**
 
 | Software              | Version     | Description                        |
 | --------------------------------- | ----------- | ----------------------------------------- |
-| CentOS|7.1| Guest OS <br/> VMWare and Virtual box :[chef/centos-7.1](https://atlas.hashicorp.com/chef/boxes/centos-7.1) <br/> & parallels : [parallels/centos-7.1](https://atlas.hashicorp.com/parallels/boxes/centos-7.1) |
-| Java (oracle)              | 1.8.0_151    |     |
-| ElasticSearch                     | 6.1.1       | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
-| Kibana | 6.1.1 | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
-| LogStash | 6.1.1 | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
+| CentOS|7.x| __Guest OS__ <br/> VMWare and Virtual box : [bento/centos-7.4](https://app.vagrantup.com/bento/boxes/centos-7.4) <br/> & parallels : [parallels/centos-7.3](https://atlas.hashicorp.com/parallels/boxes/centos-7.3) <br/> & libvirt : [magneticone/centos-7](https://app.vagrantup.com/magneticone/boxes/centos-7) |
+| Java (Oracle) | 1.8.0_161 | [Documentation](http://www.oracle.com/technetwork/java/javase/documentation/index.html) |
+| ElasticSearch | 6.2.3     | [Reference Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) / [Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html) |
+| Kibana        | 6.2.3     | [Reference Guide](https://www.elastic.co/guide/en/kibana/current/index.html)|
+| Logstash      | 6.2.3     | [Reference Guide](https://www.elastic.co/guide/en/logstash/current/index.html)|
 
 **Cluster Details**
 
@@ -37,7 +37,9 @@ _ES Endpoint URL_ : [**http://localhost:9200/**](http://localhost:9200/) (_from 
 
 _Kibana Endpoint URL_ : [**http://localhost:5601/**](http://localhost:5601/) (_from Host Machine_)
 
-_Logstash Syslog Ports_ : **localhost:5514 (Both TCP and UDP)** (_from Host Machine_)
+_Logstash Syslog Ports_ : **localhost:5514 (TCP and UDP)** (_from Host Machine_)
+
+_Logstash Beats Ports_ : **localhost:5044 (TCP)** (_from Host Machine_)
 
 _Cluster Nodes :_
 
@@ -50,7 +52,7 @@ _Cluster Nodes :_
 |vm4|baal|10.1.1.14|9200<=>9204<br/>9300<=>9304|4<sup>th</sup> Elasticsearch Node<br/>(_Not started by default_)|
 |vm5|shifu|10.1.1.15|9200<=>9205<br/>9300<=>9305|5<sup>th</sup> Elasticsearch Node<br/>(_Not started by default_)|
 |vm250|kibana|10.1.1.250|**9200<=>9200<br/>9300<=>9300<br/>5601<=>5601**|Kibana + ES Client Node|
-|vm251|logstash|10.1.1.251|**5514<=>5514<br/>(TCP & UDP)**|Logstash Node|
+|vm251|logstash|10.1.1.251|**5514<=>5514&nbsp;(TCP&nbsp;&amp;&nbsp;UDP)<br/>5044<=>5044&nbsp;(TCP)**|Logstash Node<br/>(syslog & beats)|
 
 
 **WARNING**:  You'll need enough RAM to run VMs in your cluster. Each new VM launched within your cluster will have 1024M of RAM allocated.
@@ -76,25 +78,25 @@ _Cluster Nodes :_
 
 
 
-1. Pre Requisite & Set up
+1. Prerequisites & Set up
 --
 
 **Must have on your host machine**
 
-* VirtualBox (last version) OR VMWare desktop|fusion OR parallels
+* VirtualBox OR VMWare desktop|fusion OR parallels
 * Vagrant (>=1.7)
 * Respective vagrant plugins for vmware or parallels
 * cUrl (or another REST client to talk to ES)
 
 **Clone this repository**
 
-`git clone https://github.com/pythiangonzalez/vagrant-elk-cluster.git`
+`git clone https://github.com/rybskej/vagrant-elk-cluster.git`
 
 **Download Installation Files**
 
 This needs to be done just once (this gets all done for you).
 
-*	Download JDK 8u151 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
+*	Download JDK 8u161 64bit RPM from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/) 
 *	Download elasticsearch from [elastic](https://www.elastic.co/downloads/elasticsearch)
 *	Download kibana from [elastic](https://www.elastic.co/downloads/kibana)
 *	Download logstash from [elastic](https://www.elastic.co/downloads/logstash)
@@ -112,7 +114,7 @@ Simply go in the cloned directory (vagrant-elk-cluster by default).
 Execute this command :
 
 ```bash
-vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_workstation>
+vagrant up --no-parallel --provider <virtualbox|parallels|vmware_fusion|vmware_workstation|libvirt>
 ```
 
  I recommend starting in `no-parallel` mode as it is the safest, but you can also try with removing this argument.
@@ -251,7 +253,7 @@ To access ES Rest API from Host machine you can use [**http://localhost:9200/**]
 
 TO access ES Rest Endpoint on a data node, use 9200 + \<node number> on the host machine. so for vm1 it would be  9201 so [http://localhost:9201/](http://localhost:9201/) and 9202 for vm2, and so forth. But you will hardly need to access these endpoints from host machine.
 
-To access Kibana from host machine use [**http://localhost:5601/**](http://localhost:5601/). Logstash node has been setup to receive syslog messages on port 5514 (TCP & UDP) and the host machine will forward anything on its port 5514 (TCP & UDP) to these ports.
+To access Kibana from host machine use [**http://localhost:5601/**](http://localhost:5601/). Logstash node has been setup to receive syslog messages on port 5514 (TCP & UDP) and the host machine will forward anything on its port 5514 (TCP & UDP) to these ports. Logstash node has been setup to receive beats messages on port 5044 (TCP), and the host machine will forward anything on its port 5044 (TCP) to these ports.
 
 4. Configure your cluster
 --

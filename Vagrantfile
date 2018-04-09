@@ -21,8 +21,8 @@ Vagrant.configure("2") do |config|
     cluster_cpu = utils.get_cluster_info 'cluster_cpu'
     cluster_cpu = cluster_cpu.to_i
 
-    config.vm.box = 'bento/centos-7.1'
-    #config.vm.box = 'bhaskarvk/centos7-x86_64'
+    # Use bento project boxes by default
+    config.vm.box = 'bento/centos-7.4'
 
     # Workaround for SSH authentication failure in Vagrant 1.8.5
     config.ssh.insert_key = false
@@ -36,9 +36,19 @@ Vagrant.configure("2") do |config|
         vbox.gui = false
     end
 
+    # Libvirt
+    config.vm.provider 'libvirt' do |libvirt|
+	# use a box compatible with libvert
+        config.vm.box = 'magneticone/centos-7'
+        libvirt.uri = 'qemu:///system'
+        libvirt.memory = cluster_ram
+        libvirt.cpus = cluster_cpu
+    end
+
     # Parallels
     config.vm.provider "parallels" do |v, override|
-        override.vm.box = "parallels/centos-7.1"
+	# use official parallels vm
+        override.vm.box = "parallels/centos-7.3"
         #v.update_guest_tools = true
         v.optimize_power_consumption = false
         v.memory = cluster_ram
@@ -128,6 +138,7 @@ Vagrant.configure("2") do |config|
             run: 'always'
         node.vm.network "forwarded_port", guest: 5514, host: 5514, protocol: 'tcp'
         node.vm.network "forwarded_port", guest: 5514, host: 5514, protocol: 'udp'
+        node.vm.network "forwarded_port", guest: 5044, host: 5044, protocol: 'tcp'
         node.vm.provider "parallels" do |v|
             v.name = "elasticsearch-#{name}"
         end
