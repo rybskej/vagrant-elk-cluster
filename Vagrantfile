@@ -37,9 +37,9 @@ Vagrant.configure("2") do |config|
     end
 
     # Libvirt
-    config.vm.provider 'libvirt' do |libvirt|
-	# use a box compatible with libvert
-        config.vm.box = 'magneticone/centos-7'
+    config.vm.provider 'libvirt' do |libvirt, override|
+        # use a box compatible with libvirt
+        override.vm.box = 'magneticone/centos-7'
         libvirt.uri = 'qemu:///system'
         libvirt.memory = cluster_ram
         libvirt.cpus = cluster_cpu
@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
 
     # Parallels
     config.vm.provider "parallels" do |v, override|
-	# use official parallels vm
+        # use official parallels vm
         override.vm.box = "parallels/centos-7.3"
         #v.update_guest_tools = true
         v.optimize_power_consumption = false
